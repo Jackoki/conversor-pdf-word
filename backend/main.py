@@ -3,8 +3,8 @@ from converter.converter import Converter
 
 def main():
     try:
-    input_path = os.path.abspath("files/input/teste.pdf")
-    output_path = os.path.abspath("files/output/teste.docx")
+        input_path = os.path.abspath("files/input/teste.pdf")
+        output_path = os.path.abspath("files/output/teste.docx")
 
 
         # Garante que a pasta de saída existe
@@ -23,5 +23,5 @@ def main():
         print("Erro durante a conversão:")
         print(e)
 
-    if **name** == "**main**":
+if __name__ == "__main__":
     main()
