@@ -1,17 +1,35 @@
-from pdf2docx import Converter as PDFConverter
 import os
+import fitz
+from docx import Document
+
+from converter.strategies.text_strategy import TextStrategy
+from converter.strategies.image_strategy import ImageStrategy
+from converter.strategies.hybrid_strategy import HybridStrategy
 
 class Converter:
+    def __init__(self, mode="hybrid"):
+        self.mode = mode
+
     def convert(self, input_path, output_path):
         if not os.path.exists(input_path):
-            raise FileNotFoundError(f"Arquivo de entrada não encontrado: {input_path}")
+            raise FileNotFoundError(f"Arquivo não encontrado: {input_path}")
 
-        if not input_path.lower().endswith(".pdf"):
-            raise ValueError("O arquivo de entrada deve ser um PDF")
+        pdf = fitz.open(input_path)
+        doc = Document()
 
-        cv = PDFConverter(input_path)
+        strategy = self._get_strategy()
 
-        try:
-            cv.convert(output_path, start=0, end=None, layout=True)
-        finally:
-            cv.close()
+        for i, page in enumerate(pdf):
+            strategy.process(page, doc, i)
+
+        doc.save(output_path)
+
+    def _get_strategy(self):
+        if self.mode == "text":
+            return TextStrategy()
+        elif self.mode == "image":
+            return ImageStrategy()
+        elif self.mode == "hybrid":
+            return HybridStrategy()
+        else:
+            raise ValueError("Modo inválido")

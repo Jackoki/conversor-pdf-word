@@ -3,17 +3,16 @@ from converter.converter import Converter
 
 def main():
     try:
-        input_path = os.path.abspath("files/input/teste.pdf")
-        output_path = os.path.abspath("files/output/teste.docx")
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+        input_path = os.path.join(BASE_DIR, "files", "input", "teste.pdf")
+        output_path = os.path.join(BASE_DIR, "files", "output", "teste.docx")
 
-        # Garante que a pasta de saída existe
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-        # Instancia o converter
-        converter = Converter()
+        # 🔥 modo: "text", "image", "hybrid"
+        converter = Converter(mode="hybrid")
 
-        # Executa a conversão
         converter.convert(input_path, output_path)
 
         print("Conversão realizada com sucesso!")
